@@ -4,6 +4,7 @@ import com.VendaServicosProdutosApi.VendaServicosProdutosApi.exception.RecursoNa
 import com.VendaServicosProdutosApi.VendaServicosProdutosApi.model.User;
 import com.VendaServicosProdutosApi.VendaServicosProdutosApi.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +34,12 @@ public class UsersServices {
         }
         user.setId(idUser);
         return usersRepository.save(user);
+    }
+
+
+    public void deleteUserById(Long idUser) {
+        usersRepository.findById(idUser).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado: " + idUser));
+        usersRepository.deleteById(idUser);
     }
 
 }

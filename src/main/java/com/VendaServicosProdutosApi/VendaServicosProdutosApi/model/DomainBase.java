@@ -7,6 +7,7 @@ import jakarta.persistence.PreUpdate;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @MappedSuperclass
@@ -18,15 +19,24 @@ public abstract class DomainBase {
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
 
+    @Column (name = "created_by")
+    private String createdBy;
+
+    @Column (name = "updated_by")
+    private String updatedBy;
+
     @PrePersist
     protected void onCreate() {
         this.dateCreated = LocalDateTime.now();
         this.lastUpdated = this.dateCreated;
+        this.createdBy = UUID.randomUUID().toString();
+        this.updatedBy = UUID.randomUUID().toString();
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.lastUpdated = LocalDateTime.now();
+        this.updatedBy = UUID.randomUUID().toString();
     }
 
     public void setDateCreated(LocalDateTime dateCreated) {
@@ -36,6 +46,10 @@ public abstract class DomainBase {
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
+
+    public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
+
+    public void setUpdatedBy(String updatedBy) { this.updatedBy = updatedBy; }
 }
 
 //package com.VendaServicosProdutosApi.VendaServicosProdutosApi.model;
