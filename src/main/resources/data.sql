@@ -4,3 +4,6 @@ INSERT INTO users (name, login, password, email, usertype, avatar, active) VALUE
 ('Daffy Duck', 'duck', 'senha123','daffy@acme.com', 'ADMIN', 'https://www.gravatar.com/avatar/daf4b5b81342fe587d5043b3e58a0180?s=200', true),
 ('Bugs Bunny', 'bunny', 'senha123','bugs@acme.com', 'FUNCIONARIO', 'https://www.gravatar.com/avatar/9f0c2cb2d5f8264e2c35d92f3655f2b3?s=200', true),
 ('Elmer Fudd', 'fudd', 'senha123', 'elmer@acme.com', 'CLIENTE', 'https://www.gravatar.com/avatar/6be1f3c98be3886b5473b7b947fe82ad?s=200', true);
+
+INSERT INTO product (name, description, uniti_Price, quantity, active) VALUES
+('Papel Foto', 'Papel Gloss Foto', 5, 10, true );
