@@ -1,5 +1,6 @@
 package com.VendaServicosProdutosApi.VendaServicosProdutosApi.controller;
 
+import com.VendaServicosProdutosApi.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.VendaServicosProdutosApi.model.User;
 import com.VendaServicosProdutosApi.VendaServicosProdutosApi.service.UsersServices;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +32,12 @@ public class UsersController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findUserById(@RequestParam Long idUser) {
+    public ResponseEntity<User> findUserById(@PathVariable Long id) {
         try {
-            User user = usersServices.findUserById(idUser);
+            User user = usersServices.findUserById(id);
             return ResponseEntity.ok(user);
-        } catch (Exception e) {
-            return null;
+        } catch (RecursoNaoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 

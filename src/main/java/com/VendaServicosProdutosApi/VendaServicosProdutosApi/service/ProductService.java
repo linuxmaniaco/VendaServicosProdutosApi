@@ -1,5 +1,6 @@
 package com.VendaServicosProdutosApi.VendaServicosProdutosApi.service;
 
+import com.VendaServicosProdutosApi.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.VendaServicosProdutosApi.model.Product;
 import com.VendaServicosProdutosApi.VendaServicosProdutosApi.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,5 +16,27 @@ public class ProductService {
     public List<Product> findAll() {
 
         return productRepository.findAll();
+    }
+
+    public Product productSave(Product product) {
+        return  productRepository.save(product);
+    }
+
+    public Product productFindById(Long idProduct) {
+        return productRepository.findById(idProduct)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Produto não encontrado: " + idProduct));
+    }
+
+    public Product productUpdate(Long id, Product product) {
+        if(!productRepository.findById(id).isPresent()) {
+            throw new RecursoNaoEncontradoException("Produto não encontrado: " + id);
+        }
+        product.setId(id);
+        return  productRepository.save(product);
+    }
+
+    public void productDelete(Long idProduct) {
+        productRepository.findById(idProduct).orElseThrow(()-> new RecursoNaoEncontradoException("Produto não encontrado: " + idProduct));
+        productRepository.deleteById(idProduct);
     }
 }
