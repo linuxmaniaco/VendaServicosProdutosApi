@@ -5,5 +5,10 @@ INSERT INTO users (name, login, password, email, usertype, avatar, active) VALUE
 ('Bugs Bunny', 'bunny', 'senha123','bugs@acme.com', 'FUNCIONARIO', 'https://www.gravatar.com/avatar/9f0c2cb2d5f8264e2c35d92f3655f2b3?s=200', true),
 ('Elmer Fudd', 'fudd', 'senha123', 'elmer@acme.com', 'CLIENTE', 'https://www.gravatar.com/avatar/6be1f3c98be3886b5473b7b947fe82ad?s=200', true);
 
-INSERT INTO product (name, description, uniti_Price, quantity, active) VALUES
+INSERT INTO product (name, description, unit_Price, quantity_estoque, active) VALUES
 ('Papel Foto', 'Papel Gloss Foto', 5, 10, true );
+
+
+INSERT INTO service (name, description, price, active) VALUES
+('Xerox', 'copias', 0.5, true),
+('Impressão', 'impressão colorida', 2, true);

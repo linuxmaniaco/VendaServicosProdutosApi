@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "product")
-public class Product extends DomainBase{
+@Table(name = "service")
+public class PrintService extends DomainBase{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,13 +27,9 @@ public class Product extends DomainBase{
 
     @NotNull
     @Column(nullable = false)
-    private Double unit_Price;
+    private Double price;
 
     @NotNull
     @Column(nullable = false)
-    private int quantity_estoque;
-
-    @NotNull
-    @Column(nullable = false)
-    private Boolean active;
+    private boolean active;
 }
