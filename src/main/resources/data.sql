@@ -8,7 +8,11 @@ INSERT INTO users (name, login, password, email, usertype, avatar, active) VALUE
 INSERT INTO product (name, description, unit_Price, quantity_estoque, active) VALUES
 ('Papel Foto', 'Papel Gloss Foto', 5, 10, true );
 
+INSERT INTO service_variation (id, name, active) VALUES
+(1,'Xerox P&B', true),
+(2,'Xerox Cor', true);
 
-INSERT INTO service (name, description, price, active) VALUES
-('Xerox', 'copias', 0.5, true),
-('Impressão', 'impressão colorida', 2, true);
+-- INSERT INTO service (name, description, price, active) VALUES
+-- ('Xerox', 'copias', 0.5, true),
+-- ('Impressão', 'impressão colorida', 2, true);
+--
