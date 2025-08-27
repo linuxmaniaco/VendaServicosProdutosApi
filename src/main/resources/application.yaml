@@ -2,13 +2,10 @@ spring:
   application:
     name: VendaServicosProdutos
   datasource:
-    url: jdbc:h2:mem:db  # URL para o banco de dados H2 em mem?ria
-    driverClassName: org.h2.Driver
-    username: sa
-    password: ''
-  h2:
-    console:
-      enabled: true
+    datasource:
+      url: jdbc:mysql://servico-lan:3306/servico-lan
+      username: edu
+      password: 123456
 
   jpa:
     defer-datasource-initialization: true
