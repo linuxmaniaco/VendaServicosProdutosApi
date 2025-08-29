@@ -22,5 +22,9 @@ public class ServiceVariation {
 
     @NotNull
     @Column(nullable = false)
+    private Double price;
+
+    @NotNull
+    @Column(nullable = false)
     private boolean active;
 }

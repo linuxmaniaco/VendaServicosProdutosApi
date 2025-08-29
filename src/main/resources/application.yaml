@@ -1,11 +1,12 @@
 spring:
   application:
     name: VendaServicosProdutos
+
   datasource:
-    datasource:
-      url: jdbc:mysql://servico-lan:3306/servico-lan
-      username: edu
-      password: 123456
+    url: jdbc:mysql://localhost:3306/services_lan
+    username: root
+    password: senha123
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     defer-datasource-initialization: true
