@@ -1,11 +1,17 @@
 package com.VendaServicosProdutosApi.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "sales_order")
 public class SalesOrder {
 
@@ -19,7 +25,7 @@ public class SalesOrder {
     @Column(name = "customer", nullable = false, length = 255)
     private String customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user", nullable = false)
     private User user;
 
