@@ -33,7 +33,7 @@ public class PrintService extends DomainBase{
     @Column(nullable = false)
     private boolean active;
 
-    @ManyToOne
-    @JoinColumn(name = "service_variation_id", nullable = false)
-    private ServiceVariation variationType;
+//    @ManyToOne
+//    @JoinColumn(name = "service_variation_id", nullable = false)
+//    private ServiceVariation variationType;
 }
