@@ -1,5 +1,6 @@
 package com.VendaServicosProdutosApi.controller;
 
+import com.VendaServicosProdutosApi.dto.SalesOrderDTO;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.Product;
 import com.VendaServicosProdutosApi.model.SalesOrder;
@@ -31,18 +32,10 @@ public class SalesOrderController {
     @PostMapping
     public ResponseEntity<SalesOrder> salesOrderSave(@RequestBody SalesOrder salesOrder) {
         SalesOrder savedSalesOrder = salesOrderService.salesOrderSave(salesOrder);
-        return ResponseEntity.ok(savedSalesOrder);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedSalesOrder);
+//        return ResponseEntity.ok(savedSalesOrder);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SalesOrder> salesOrderUpdate(@PathVariable Long id, @RequestBody SalesOrder salesOrder) {
-        try {
-            SalesOrder savedSalesOrder = salesOrderService.salesOrderUpdate(id, salesOrder);
-            return ResponseEntity.ok(savedSalesOrder);
-        } catch (RuntimeException e) {
-            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> salesOrderDelete(@PathVariable Long id) {
@@ -53,6 +46,4 @@ public class SalesOrderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
-
-
 }

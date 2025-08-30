@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
+import java.util.List;
 
 @Entity
 @Data
@@ -35,5 +35,8 @@ public class SalesOrder {
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false)
     private OrderStatus status = OrderStatus.ABERTO;
-}
 
+    // Relacionamento com itens do pedido
+    @OneToMany(mappedBy = "salesOrder", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItens> orderItensList;
+}

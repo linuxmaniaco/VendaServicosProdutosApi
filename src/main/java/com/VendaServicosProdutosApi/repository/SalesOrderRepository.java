@@ -1,5 +1,6 @@
 package com.VendaServicosProdutosApi.repository;
 
+import com.VendaServicosProdutosApi.dto.SalesOrderDTO;
 import com.VendaServicosProdutosApi.model.SalesOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 

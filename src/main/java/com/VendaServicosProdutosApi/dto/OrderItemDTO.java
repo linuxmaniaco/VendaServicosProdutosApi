@@ -1,0 +1,11 @@
+package com.VendaServicosProdutosApi.dto;
+
+import lombok.Data;
+
+@Data
+public class OrderItemDTO {
+    private Long productId;
+    private Long serviceVariationId;
+    private Integer quantity;
+    private Double unitPrice;
+}
