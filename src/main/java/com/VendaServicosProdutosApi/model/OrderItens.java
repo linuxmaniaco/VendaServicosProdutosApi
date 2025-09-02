@@ -1,5 +1,7 @@
 package com.VendaServicosProdutosApi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.Order;
 import lombok.AllArgsConstructor;
@@ -32,18 +34,24 @@ public class OrderItens {
     @Column(name = "valor_total_item", nullable = false, precision = 12, scale = 2)
     private BigDecimal totalItemValue;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_sales_order", nullable = false)
+    @JsonIgnore  // Ignora a serialização do salesOrder dentro de OrderItens
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // ignora a conversão do proxy em JSON.
     private SalesOrder salesOrder;
 
     // 🔹 Associação com Produto (opcional)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_product")
+//    @JsonIgnore  // Ignora a serialização do salesOrder dentro de OrderItens
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // ignora a conversão do proxy em JSON.
     private Product product;
 
     // 🔹 Associação com Serviço (opcional)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_print_service")
+//    @JsonIgnore  // Ignora a serialização do salesOrder dentro de OrderItens
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // ignora a conversão do proxy em JSON.
     private PrintService printService;
 
     @Enumerated(EnumType.STRING)
@@ -57,5 +65,13 @@ public class OrderItens {
         if (quantity != null && unitValueAtTimeOfSale != null) {
             this.totalItemValue = unitValueAtTimeOfSale.multiply(BigDecimal.valueOf(quantity));
         }
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

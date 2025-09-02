@@ -1,10 +1,13 @@
 package com.VendaServicosProdutosApi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,7 +39,6 @@ public class SalesOrder {
     @Column(name = "order_status", nullable = false)
     private OrderStatus status = OrderStatus.ABERTO;
 
-    // Relacionamento com itens do pedido
-    @OneToMany(mappedBy = "salesOrder", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItens> orderItensList;
+    @OneToMany(mappedBy = "salesOrder", cascade = CascadeType.ALL, orphanRemoval = true) // Relacionamento com itens do pedido
+    private List<OrderItens> orderItensList = new ArrayList<>();
 }
