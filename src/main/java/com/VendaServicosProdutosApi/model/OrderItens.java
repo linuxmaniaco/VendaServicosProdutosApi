@@ -66,12 +66,4 @@ public class OrderItens {
             this.totalItemValue = unitValueAtTimeOfSale.multiply(BigDecimal.valueOf(quantity));
         }
     }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
 }

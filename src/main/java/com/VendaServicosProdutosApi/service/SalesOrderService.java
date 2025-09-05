@@ -5,7 +5,6 @@ import com.VendaServicosProdutosApi.model.OrderItens;
 import com.VendaServicosProdutosApi.model.PrintService;
 import com.VendaServicosProdutosApi.model.Product;
 import com.VendaServicosProdutosApi.model.SalesOrder;
-import com.VendaServicosProdutosApi.repository.OrderItensRepository;
 import com.VendaServicosProdutosApi.repository.PrintServiceRepository;
 import com.VendaServicosProdutosApi.repository.ProductRepository;
 import com.VendaServicosProdutosApi.repository.SalesOrderRepository;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,19 +21,26 @@ public class SalesOrderService {
     private final SalesOrderRepository salesOrderRepository;
     private final ProductRepository  productRepository;
     private final PrintServiceRepository  printServiceRepository;
+    private final OrderItensService orderItensService;
 
     public List<SalesOrder> getAllSalesOrders() {
         return salesOrderRepository.findAll();
     }
 
     public SalesOrder salesOrderSave(SalesOrder salesOrder) {
+        BigDecimal totalValue = BigDecimal.ZERO;
+//        Long id;
+        updateList(salesOrder);
+        return salesOrderRepository.save(salesOrder);
+    }
 
+
+    public void updateList(SalesOrder salesOrder) {
         for (OrderItens item : salesOrder.getOrderItensList()) {
-
             item.setSalesOrder(salesOrder);
 
             // Verifica se é Produto
-            if ("PRODUTO".equalsIgnoreCase(item.getItemType().name())) {
+            if ("PRODUTO".equalsIgnoreCase(item.getItemType().toString()) && item.getProduct().getId() != null) {
                 Product product = productRepository.findById(item.getProduct().getId())
                         .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
                 item.setUnitValueAtTimeOfSale(BigDecimal.valueOf(product.getUnit_Price()));
@@ -57,26 +62,7 @@ public class SalesOrderService {
         BigDecimal totalValue = salesOrder.getOrderItensList().stream()
                 .map(OrderItens::getTotalItemValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-
         salesOrder.setTotalValue(totalValue);
-
-        return salesOrderRepository.save(salesOrder);
-
-//            // Processa e garante o vínculo entre SalesOrder e OrderItens
-//            for (OrderItens item : salesOrder.getOrderItensList()) {
-//                item.setSalesOrder(salesOrder);  // Relaciona o item com o pedido
-//                item.calculateTotalValue();  // Calcula o valor total do item
-//            }
-//
-//        // Calcula o valor total do pedido somando todos os itens
-//        BigDecimal totalValue = salesOrder.getOrderItensList()
-//                .stream()
-//                .map(OrderItens::getTotalItemValue)
-//                .reduce(BigDecimal.ZERO, BigDecimal::add);
-//
-//        salesOrder.setTotalValue(totalValue); // Atualiza o total do pedido
-//
-//        return salesOrderRepository.save(salesOrder);
     }
 
     public SalesOrder salesOrderUpdate(Long id, SalesOrder salesOrder) {
@@ -84,6 +70,7 @@ public class SalesOrderService {
             throw new RecursoNaoEncontradoException("Cliente não encontrado: " + id);
         }
         salesOrder.setId(id);
+        updateList(salesOrder);
         return salesOrderRepository.save(salesOrder);
     }
 

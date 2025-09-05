@@ -36,6 +36,16 @@ public class SalesOrderController {
 //        return ResponseEntity.ok(savedSalesOrder);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<SalesOrder> salesOrderUpdate(@PathVariable Long id, @RequestBody SalesOrder salesOrder) {
+        try {
+            SalesOrder savedSalesOrder = salesOrderService.salesOrderUpdate(id, salesOrder);
+            return ResponseEntity.ok(savedSalesOrder);
+        } catch (RecursoNaoEncontradoException e) {
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> salesOrderDelete(@PathVariable Long id) {
