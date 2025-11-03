@@ -3,6 +3,7 @@ package com.VendaServicosProdutosApi.service;
 
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.Product;
+import com.VendaServicosProdutosApi.repository.AuditLogProductRepository;
 import com.VendaServicosProdutosApi.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final AuditLogProductService auditLogProductService;
 
     public List<Product> findAll() {
         return productRepository.findAll();
     }
 
     public Product productSave(Product product) {
+//        auditLogProductService.logInsert(product, );
         return  productRepository.save(product);
     }
 

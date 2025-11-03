@@ -51,20 +51,3 @@ public abstract class DomainBase {
 
     public void setUpdatedBy(String updatedBy) { this.updatedBy = updatedBy; }
 }
-
-//package com.VendaServicosProdutosApi.VendaServicosProdutosApi.model;
-//
-//import lombok.AllArgsConstructor;
-//import lombok.NoArgsConstructor;
-//
-//import java.time.LocalDateTime;
-//
-//@AllArgsConstructor@NoArgsConstructor
-//@Getter
-//@MappedSuperclass
-//public class DomainBase {
-//    private LocalDateTime dateCreated = LocalDateTime.now();
-//    private LocalDateTime lastUpdated = LocalDateTime.now();
-//    private String createdBy = "system";
-//    private String updatedBy = "system";
-//}

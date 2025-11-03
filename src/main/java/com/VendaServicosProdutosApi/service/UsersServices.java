@@ -38,6 +38,8 @@ public class UsersServices {
     }
 
 
+
+
     public void deleteUserById(Long idUser) {
         usersRepository.findById(idUser).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado: " + idUser));
         usersRepository.deleteById(idUser);

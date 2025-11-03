@@ -15,9 +15,11 @@ import java.util.List;
 @RequestMapping("api/users")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*")
 public class UsersController {
 
     private final UsersServices usersServices;
+
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
