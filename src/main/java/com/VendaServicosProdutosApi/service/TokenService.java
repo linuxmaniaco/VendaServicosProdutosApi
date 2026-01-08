@@ -2,7 +2,9 @@ package com.VendaServicosProdutosApi.service;
 
 import com.VendaServicosProdutosApi.model.User;
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,16 +15,38 @@ import java.util.Date;
 @Slf4j
 @Service
 public class TokenService {
-//    private final String secret = "MY-SUPER-SECRET-1234";
-//    public String generateToken(User user) {
-//        Algorithm algorithm = Algorithm.HMAC512(secret);
-//        return JWT.create()
-//                .withIssuer("ACME.COM")
-//                .withSubject(user.getId().toString())
-//                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
-//                .withIssuedAt(LocalDateTime.now().toInstant(ZoneOffset.UTC))
-//                .withClaim("email", user.getEmail())
-//                .sign(algorithm);
-//    }
+    private final String secret = "MY-SUPER-SECRET-1234";
+    public String generateToken(User user) {
+        Algorithm algorithm = Algorithm.HMAC512(secret);
+        return JWT.create()
+                .withIssuer("ACME.COM")
+                .withSubject(String.valueOf(user.getId()))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
+                .withIssuedAt(LocalDateTime.now().toInstant(ZoneOffset.UTC))
+                .withClaim("email", user.getEmail())
+                .sign(algorithm);
+    }
+
+    public DecodedJWT isValid(String token) {
+        DecodedJWT decodedJWT;
+        String valid = startsWithBearer(token);
+        Algorithm algorithm = Algorithm.HMAC512(secret);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer("ACME.COM")
+                .build();
+        decodedJWT = verifier.verify(valid);
+        return decodedJWT;
+    }
+
+    public String getUsuario(DecodedJWT decodedJWT) {
+        return decodedJWT.getSubject();
+    }
+
+    private String startsWithBearer(String token){
+        if(!token.startsWith("Bearer")){
+            throw new IllegalArgumentException("Invalid Token") ;
+        }
+        return token.replace("Bearer", "").trim();
+    }
 
 }

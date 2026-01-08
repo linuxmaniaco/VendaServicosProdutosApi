@@ -37,7 +37,14 @@ public class UsersServices {
         return usersRepository.save(user);
     }
 
-
+    public Optional<User> findUserByEmail(String email) {
+        User byEmail = usersRepository.findByEmail(email);
+        if(byEmail == null) {
+            return Optional.empty();
+        } else {
+            return Optional.of(byEmail);
+        }
+    }
 
 
     public void deleteUserById(Long idUser) {
