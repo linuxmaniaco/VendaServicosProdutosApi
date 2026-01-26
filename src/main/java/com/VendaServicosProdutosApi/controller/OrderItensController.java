@@ -1,5 +1,6 @@
 package com.VendaServicosProdutosApi.controller;
 
+import com.VendaServicosProdutosApi.dto.OrderItensResponseDTO;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.OrderItens;
 import com.VendaServicosProdutosApi.service.OrderItensService;
@@ -20,7 +21,7 @@ public class OrderItensController {
     private final OrderItensService orderItensService;
 
     @GetMapping
-    public List<OrderItens> list(){
+    public List<OrderItensResponseDTO> list(){
         return orderItensService.findAll();
     }
 
