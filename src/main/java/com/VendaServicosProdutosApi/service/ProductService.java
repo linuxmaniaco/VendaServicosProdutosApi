@@ -3,8 +3,8 @@ package com.VendaServicosProdutosApi.service;
 
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.Product;
-import com.VendaServicosProdutosApi.repository.AuditLogProductRepository;
 import com.VendaServicosProdutosApi.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,6 @@ public class ProductService {
     }
 
     public Product productSave(Product product) {
-//        auditLogProductService.logInsert(product, );
         return  productRepository.save(product);
     }
 
@@ -30,12 +29,20 @@ public class ProductService {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Produto não encontrado: " + idProduct));
     }
 
+    @Transactional
     public Product productUpdate(Long id, Product product) {
-        if(!productRepository.findById(id).isPresent()) {
-            throw new RecursoNaoEncontradoException("Produto não encontrado: " + id);
-        }
-        product.setId(id);
-        return  productRepository.save(product);
+        Product productFromDb = productRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Produto não encontrado"));
+
+        productFromDb.setName(product.getName());
+        productFromDb.setDescription(product.getDescription());
+        productFromDb.setUnit_Price(product.getUnit_Price());
+        productFromDb.setStock_quantity(product.getStock_quantity());
+        productFromDb.setActive(product.getActive());
+
+        return productFromDb;
+//        product.setId(id);
+//        return productRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Produto não Encontrado: " + id));
     }
 
     public void productDelete(Long idProduct) {

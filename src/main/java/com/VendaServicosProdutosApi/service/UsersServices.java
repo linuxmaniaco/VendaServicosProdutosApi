@@ -4,8 +4,8 @@ package com.VendaServicosProdutosApi.service;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.User;
 import com.VendaServicosProdutosApi.repository.UsersRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,12 +29,21 @@ public class UsersServices {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado: " + idUser));
     }
 
-    public User updateUser(Long idUser, User user) {
-        if(!usersRepository.existsById(idUser)) {
-            throw new RecursoNaoEncontradoException("Usuário não encontrado: " + idUser);
-        }
-        user.setId(idUser);
-        return usersRepository.save(user);
+    @Transactional
+    public User updateUser(Long idUser, User userRequest) {
+        User userFromDb = usersRepository.findById(idUser)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Usuário Não encontrado"));
+
+        userFromDb.setName(userRequest.getName());
+        userFromDb.setLogin(userRequest.getLogin());
+        userFromDb.setPassword(userRequest.getPassword());
+        userFromDb.setEmail(userRequest.getEmail());
+        userFromDb.setUsertype(userRequest.getUsertype());
+        userFromDb.setAvatar(userRequest.getAvatar());
+        userFromDb.setActive(userRequest.getActive());
+
+//        userRequest.setId(idUser);
+        return userRequest;
     }
 
     public Optional<User> findUserByEmail(String email) {

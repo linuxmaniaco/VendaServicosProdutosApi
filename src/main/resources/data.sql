@@ -5,7 +5,7 @@
 -- ('Bugs Bunny', 'bunny', 'senha123','bugs@acme.com', 'FUNCIONARIO', 'https://www.gravatar.com/avatar/9f0c2cb2d5f8264e2c35d92f3655f2b3?s=200', true),
 -- ('Elmer Fudd', 'fudd', 'senha123', 'elmer@acme.com', 'CLIENTE', 'https://www.gravatar.com/avatar/6be1f3c98be3886b5473b7b947fe82ad?s=200', true);
 --
--- INSERT INTO product (name, description, unit_Price, quantity_estoque, active) VALUES
+-- INSERT INTO product (name, description, unit_Price, stock_quantity, active) VALUES
 -- ('Papel Foto', 'Papel Gloss Foto', 5, 10, true );
 --
 -- INSERT INTO service_variation (id, name, active) VALUES

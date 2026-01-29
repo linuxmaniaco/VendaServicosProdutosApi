@@ -28,8 +28,7 @@ public class SalesOrderService {
     }
 
     public SalesOrder salesOrderSave(SalesOrder salesOrder) {
-        BigDecimal totalValue = BigDecimal.ZERO;
-//        Long id;
+
         updateList(salesOrder);
         return salesOrderRepository.save(salesOrder);
     }

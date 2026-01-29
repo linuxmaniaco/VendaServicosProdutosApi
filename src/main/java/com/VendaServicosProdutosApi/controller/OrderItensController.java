@@ -31,17 +31,20 @@ public class OrderItensController {
         return ResponseEntity.ok(orderItensSave);
     }
 
-    @PutMapping
-    public ResponseEntity<OrderItens> orderItensUpdate(@PathVariable Long id, @RequestBody OrderItens orderItens){
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderItens> orderItensUpdate(
+            @PathVariable Long id,
+            @RequestBody OrderItens orderItens
+    ){
         try {
-            orderItensService.OrderItensUpdate(id, orderItens);
-            return ResponseEntity.ok(orderItens);
+            OrderItens updateOrderItens =  orderItensService.OrderItensUpdate(id, orderItens);
+            return ResponseEntity.ok(updateOrderItens);
         } catch (RecursoNaoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> orderItensDelete(@PathVariable Long id){
         try {
             orderItensService.delete(id);

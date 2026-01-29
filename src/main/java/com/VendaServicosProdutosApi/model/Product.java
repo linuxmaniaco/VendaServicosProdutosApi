@@ -31,7 +31,7 @@ public class Product extends DomainBase{
 
     @NotNull
     @Column(nullable = false)
-    private int quantity_estoque;
+    private int stock_quantity;
 
     @NotNull
     @Column(nullable = false)

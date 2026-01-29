@@ -4,6 +4,7 @@ package com.VendaServicosProdutosApi.service;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.PrintService;
 import com.VendaServicosProdutosApi.repository.PrintServiceRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,12 +28,18 @@ public class PrintServiceService {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Serviço não encontrado: " + id));
     }
 
+    @Transactional
     public PrintService printServiceUpdate(Long id, PrintService printService) {
-        if(!printServiceRepository.findById(id).isPresent()) {
-            throw new RecursoNaoEncontradoException("Serviço não encontrado: " + id);
-        }
-        printService.setId(id);
-        return printServiceRepository.save(printService);
+
+        PrintService printServiceFromDb = printServiceRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Serviço não encontrado!"));
+
+        printServiceFromDb.setName(printService.getName());
+        printServiceFromDb.setDescription(printService.getDescription());
+        printServiceFromDb.setPrice(printService.getPrice());
+        printServiceFromDb.setActive(printService.isActive());
+
+        return printServiceFromDb;
     }
 
     public void deletePrintService(Long id) {

@@ -1,12 +1,8 @@
 package com.VendaServicosProdutosApi.controller;
 
-import com.VendaServicosProdutosApi.dto.SalesOrderDTO;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
-import com.VendaServicosProdutosApi.model.Product;
 import com.VendaServicosProdutosApi.model.SalesOrder;
-import com.VendaServicosProdutosApi.model.ServiceVariation;
 import com.VendaServicosProdutosApi.service.SalesOrderService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,7 +29,6 @@ public class SalesOrderController {
     public ResponseEntity<SalesOrder> salesOrderSave(@RequestBody SalesOrder salesOrder) {
         SalesOrder savedSalesOrder = salesOrderService.salesOrderSave(salesOrder);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedSalesOrder);
-//        return ResponseEntity.ok(savedSalesOrder);
     }
 
     @PutMapping("/{id}")

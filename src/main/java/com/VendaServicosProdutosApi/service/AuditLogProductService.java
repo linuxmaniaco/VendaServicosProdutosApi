@@ -1,5 +1,6 @@
 package com.VendaServicosProdutosApi.service;
 
+import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.repository.AuditLogProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ public class AuditLogProductService {
             repository.save(log);
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao registrar log de auditoria: " + e.getMessage());
+            throw new RecursoNaoEncontradoException("Erro ao registrar log de auditoria: " + e.getMessage());
         }
     }
 
