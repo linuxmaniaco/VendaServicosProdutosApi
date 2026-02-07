@@ -1,13 +1,12 @@
 package com.VendaServicosProdutosApi.service;
 
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
-import com.VendaServicosProdutosApi.model.OrderItens;
-import com.VendaServicosProdutosApi.model.PrintService;
-import com.VendaServicosProdutosApi.model.Product;
-import com.VendaServicosProdutosApi.model.SalesOrder;
+import com.VendaServicosProdutosApi.model.*;
 import com.VendaServicosProdutosApi.repository.PrintServiceRepository;
 import com.VendaServicosProdutosApi.repository.ProductRepository;
 import com.VendaServicosProdutosApi.repository.SalesOrderRepository;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +22,7 @@ public class SalesOrderService {
     private final PrintServiceRepository  printServiceRepository;
     private final OrderItensService orderItensService;
 
+
     public List<SalesOrder> getAllSalesOrders() {
         return salesOrderRepository.findAll();
     }
@@ -30,6 +30,7 @@ public class SalesOrderService {
     public SalesOrder salesOrderSave(SalesOrder salesOrder) {
 
         updateList(salesOrder);
+        salesOrder.setStatus(OrderStatus.PAGO);
         return salesOrderRepository.save(salesOrder);
     }
 
@@ -65,12 +66,25 @@ public class SalesOrderService {
     }
 
     public SalesOrder salesOrderUpdate(Long id, SalesOrder salesOrder) {
-        if(!salesOrderRepository.findById(id).isPresent()) {
-            throw new RecursoNaoEncontradoException("Cliente não encontrado: " + id);
+
+        SalesOrder salesOrderDB = salesOrderRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Pedido não encontrado!"));
+
+        if(salesOrderDB.getStatus() == OrderStatus.PAGO){
+            throw new RecursoNaoEncontradoException("Pedido já está pago, não pode ser auterado!");
         }
         salesOrder.setId(id);
         updateList(salesOrder);
+        salesOrder.setStatus(OrderStatus.PAGO);
         return salesOrderRepository.save(salesOrder);
+    }
+
+    public SalesOrder salesOrderStatusUpdate(Long id, SalesOrder salesOrder){
+        SalesOrder statusOrderUpdated = salesOrderRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Pedido não encontrado!"));
+
+        statusOrderUpdated.setStatus(salesOrder.getStatus());
+        return salesOrderRepository.save(statusOrderUpdated);
     }
 
     public void salesOrderDelete(Long idSalesOrder) {
