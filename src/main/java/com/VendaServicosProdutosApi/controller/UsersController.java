@@ -5,7 +5,7 @@ import com.VendaServicosProdutosApi.exception.AuthenticationException;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.User;
 import com.VendaServicosProdutosApi.payload.AuthPayload;
-import com.VendaServicosProdutosApi.service.SecurityService;
+//import com.VendaServicosProdutosApi.service.SecurityService;
 import com.VendaServicosProdutosApi.service.UsersServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ import java.util.Map;
 public class UsersController {
 
     private final UsersServices usersServices;
-    private final SecurityService securityService;
+//    private final SecurityService securityService;
 
 
     @GetMapping
@@ -33,16 +33,16 @@ public class UsersController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> autenticate(@RequestBody AuthUserDTO authUserDTO){
-        try{
-            String authenticate = securityService.authenticate(authUserDTO);
-            return ResponseEntity.ok(new AuthPayload(authenticate));
-        }catch (AuthenticationException ex){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("message", "Usuario ou senha invalidos"));
-        }
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<?> autenticate(@RequestBody AuthUserDTO authUserDTO){
+//        try{
+//            String authenticate = securityService.authenticate(authUserDTO);
+//            return ResponseEntity.ok(new AuthPayload(authenticate));
+//        }catch (AuthenticationException ex){
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+//                    .body(Map.of("message", "Usuario ou senha invalidos"));
+//        }
+//    }
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
