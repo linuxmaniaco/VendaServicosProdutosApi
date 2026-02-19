@@ -1,4 +1,26 @@
 package com.VendaServicosProdutosApi.dto;
 
-public record AuthUserDTO(String email,String password) {
+
+//public record AuthUserDTO(String email, String password) {
+//}
+
+public class AuthUserDTO {
+    private String email;
+    private String password;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
