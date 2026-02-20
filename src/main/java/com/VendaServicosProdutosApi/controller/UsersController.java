@@ -27,17 +27,6 @@ public class UsersController {
         return ResponseEntity.ok(user);
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<?> autenticate(@RequestBody AuthUserDTO authUserDTO){
-//        try{
-//            String authenticate = securityService.authenticate(authUserDTO);
-//            return ResponseEntity.ok(new AuthPayload(authenticate));
-//        }catch (AuthenticationException ex){
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-//                    .body(Map.of("message", "Usuario ou senha invalidos"));
-//        }
-//    }
-
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User savedUser = usersServices.saveUser(user); // Aqui @PrePersist é chamado

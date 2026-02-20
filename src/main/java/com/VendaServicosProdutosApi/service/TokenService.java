@@ -20,8 +20,6 @@ import java.time.ZoneOffset;
 @RequiredArgsConstructor
 public class TokenService {
 
-//    private final String secret = "MY-SUPER-SECRET-1234";
-
     @Value("${spring.secret}")
     private String secret;
 
@@ -64,39 +62,4 @@ public class TokenService {
     private Instant getDataExpiration(){
         return LocalDateTime.now().plusMinutes(expiration).toInstant(ZoneOffset.of("-03:00"));
     }
-
-//
-//    public String generateToken(User user) {
-//        Algorithm algorithm = Algorithm.HMAC512(secret);
-//        return JWT.create()
-//                .withIssuer("ACME.COM")
-//                .withSubject(String.valueOf(user.getId()))
-//                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
-//                .withIssuedAt(LocalDateTime.now().toInstant(ZoneOffset.UTC))
-//                .withClaim("email", user.getEmail())
-//                .sign(algorithm);
-//    }
-//
-//    public DecodedJWT isValid(String token) {
-//        DecodedJWT decodedJWT;
-//        String valid = startsWithBearer(token);
-//        Algorithm algorithm = Algorithm.HMAC512(secret);
-//        JWTVerifier verifier = JWT.require(algorithm)
-//                .withIssuer("ACME.COM")
-//                .build();
-//        decodedJWT = verifier.verify(valid);
-//        return decodedJWT;
-//    }
-//
-//    public String getUsuario(DecodedJWT decodedJWT) {
-//        return decodedJWT.getSubject();
-//    }
-//
-//    private String startsWithBearer(String token){
-//        if(!token.startsWith("Bearer")){
-//            throw new IllegalArgumentException("Invalid Token") ;
-//        }
-//        return token.replace("Bearer", "").trim();
-//    }
-
 }

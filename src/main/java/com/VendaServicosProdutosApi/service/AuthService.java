@@ -5,7 +5,6 @@ import com.VendaServicosProdutosApi.dto.AuthUserDTO;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,15 +18,6 @@ public class AuthService {
 
     public AuthResponse authenticate(AuthUserDTO request){
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        String raw = "senha123";
-        String newHash = encoder.encode(raw);
-
-        System.out.println(newHash);
-        System.out.println(encoder.matches(raw, newHash));
-
-
         var user = usersRepository.findByEmail(request.email())
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado!"));
 
@@ -37,6 +27,6 @@ public class AuthService {
 
         var token = tokenService.generateToken(user.getEmail());
 
-        return new AuthResponse(token, user.getEmail());
+        return new AuthResponse(token, user.toString());
     }
 }
