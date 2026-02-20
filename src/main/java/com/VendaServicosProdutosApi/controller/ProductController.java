@@ -1,8 +1,12 @@
 package com.VendaServicosProdutosApi.controller;
 
+import com.VendaServicosProdutosApi.dto.requestDTO.ProductCreateRequestDTO;
+import com.VendaServicosProdutosApi.dto.responseDTO.ProductResponseDTO;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
+import com.VendaServicosProdutosApi.mapper.ProductMapper;
 import com.VendaServicosProdutosApi.model.Product;
 import com.VendaServicosProdutosApi.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +22,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductMapper productMapper;
 
     @GetMapping
     public ResponseEntity<List<Product>> findAll() {
@@ -26,9 +31,11 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        Product savedProduct = productService.productSave(product);
-        return ResponseEntity.ok(savedProduct);
+    public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductCreateRequestDTO request) {
+        Product savedProduct = productService.productSave(productMapper.toEntity(request));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(productMapper.toResponse(savedProduct));
     }
 
     @GetMapping("/{id}")
