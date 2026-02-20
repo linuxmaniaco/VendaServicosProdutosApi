@@ -2,6 +2,7 @@ package com.VendaServicosProdutosApi.controller;
 
 import com.VendaServicosProdutosApi.dto.AuthResponse;
 import com.VendaServicosProdutosApi.dto.AuthUserDTO;
+import com.VendaServicosProdutosApi.service.AuthService;
 import com.VendaServicosProdutosApi.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,36 +20,30 @@ public class AuthController {
 
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private AuthService authService;
 
     @PostMapping("/generateToken")
     public ResponseEntity<?> gerarToken(@RequestBody AuthUserDTO request) {
         try {
 
-            if (!(request.getEmail().equals("string@arena.com")
-                    && request.getPassword().equals("string"))) {
-                return ResponseEntity.status(401).build();
-            }
+            var response = authService.authenticate(request);
+            return ResponseEntity.ok(response);
 
-            var generatedToken = tokenService.generateToken(request.getEmail());
-            return ResponseEntity.ok(
-                    new AuthResponse(generatedToken, request.getEmail())
-            );
+
+
+//            if (!(request.getEmail().equals("string@arena.com")
+//                    && request.getPassword().equals("string"))) {
+//                return ResponseEntity.status(401).build();
+//            }
+
+//            var generatedToken = tokenService.generateToken(request.getEmail());
+//            return ResponseEntity.ok(
+//                    new AuthResponse(generatedToken, request.getEmail())
+//            );
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(401).body("Usuário ou senha inválida!");
         }
     }
-//    @PostMapping("/generateToken")
-//    @Operation(summary = "generateToken", description = "Rota possível por gerar token!")
-//    public ResponseEntity<?> gerarToken(String email, String password){
-//        try {
-//            if(!(email.equals("string@arena.com") && password.equals("string"))){
-//                return ResponseEntity.notFound().build();
-//            }
-//            var generatedToken = tokenService.generateToken(email);
-//            return ResponseEntity.ok(generatedToken);
-//        } catch (Exception e){
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
 }

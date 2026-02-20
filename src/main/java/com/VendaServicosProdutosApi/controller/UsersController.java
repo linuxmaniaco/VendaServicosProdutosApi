@@ -1,11 +1,7 @@
 package com.VendaServicosProdutosApi.controller;
 
-import com.VendaServicosProdutosApi.dto.AuthUserDTO;
-import com.VendaServicosProdutosApi.exception.AuthenticationException;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.User;
-import com.VendaServicosProdutosApi.payload.AuthPayload;
-//import com.VendaServicosProdutosApi.service.SecurityService;
 import com.VendaServicosProdutosApi.service.UsersServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/users")
@@ -24,7 +19,6 @@ import java.util.Map;
 public class UsersController {
 
     private final UsersServices usersServices;
-//    private final SecurityService securityService;
 
 
     @GetMapping

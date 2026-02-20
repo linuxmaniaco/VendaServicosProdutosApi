@@ -46,8 +46,8 @@ public class UsersServices {
         return userRequest;
     }
 
-    public Optional<User> findUserByEmail(String email) {
-        User byEmail = usersRepository.findByEmail(email);
+    public Optional<Optional<User>> findUserByEmail(String email) {
+        Optional<User> byEmail = usersRepository.findByEmail(email);
         if(byEmail == null) {
             return Optional.empty();
         } else {
