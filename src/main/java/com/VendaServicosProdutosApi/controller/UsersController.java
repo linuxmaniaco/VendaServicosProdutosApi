@@ -1,8 +1,11 @@
 package com.VendaServicosProdutosApi.controller;
 
+import com.VendaServicosProdutosApi.dto.requestDTO.UserCreateRequestDTO;
+import com.VendaServicosProdutosApi.dto.responseDTO.UserResponseDTO;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.User;
 import com.VendaServicosProdutosApi.service.UsersServices;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,9 +31,11 @@ public class UsersController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser = usersServices.saveUser(user); // Aqui @PrePersist é chamado
-        return ResponseEntity.ok(savedUser);
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserCreateRequestDTO request) {
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(usersServices.saveUser(request));
     }
 
     @GetMapping("/{id}")

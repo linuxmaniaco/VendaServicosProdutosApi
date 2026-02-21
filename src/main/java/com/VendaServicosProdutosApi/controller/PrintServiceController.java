@@ -1,8 +1,13 @@
 package com.VendaServicosProdutosApi.controller;
 
+import com.VendaServicosProdutosApi.dto.requestDTO.PrintServiceCreateRequestDTO;
+import com.VendaServicosProdutosApi.dto.responseDTO.PrintServiceResponseDTO;
+import com.VendaServicosProdutosApi.dto.responseDTO.ProductResponseDTO;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
+import com.VendaServicosProdutosApi.mapper.PrintServiceMapper;
 import com.VendaServicosProdutosApi.model.PrintService;
 import com.VendaServicosProdutosApi.service.PrintServiceService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,9 +30,10 @@ public class PrintServiceController {
     }
 
     @PostMapping
-    public ResponseEntity<PrintService> CreateService(@RequestBody PrintService printService) {
-       PrintService printService1 = printServiceService.printServiceSave(printService);
-       return ResponseEntity.ok(printService1);
+    public ResponseEntity<PrintServiceResponseDTO> CreateService(@Valid @RequestBody PrintServiceCreateRequestDTO request) {
+       return ResponseEntity
+               .status(HttpStatus.CREATED)
+               .body(printServiceService.printServiceSave(request));
     }
 
     @GetMapping("/{id}")

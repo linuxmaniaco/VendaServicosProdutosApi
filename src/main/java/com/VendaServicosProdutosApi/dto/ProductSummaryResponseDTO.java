@@ -1,7 +1,6 @@
-package com.VendaServicosProdutosApi.dto.responseDTO;
+package com.VendaServicosProdutosApi.dto;
 
-public record ProductResponseDTO(
-
+public record ProductSummaryResponseDTO(
         Long id,
         String name,
         String description,
@@ -9,4 +8,4 @@ public record ProductResponseDTO(
         int stock_quantity,
         Integer minimumStock,
         Boolean active
-){}
+) {}

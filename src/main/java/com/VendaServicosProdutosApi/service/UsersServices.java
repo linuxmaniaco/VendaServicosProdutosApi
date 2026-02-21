@@ -1,7 +1,10 @@
 package com.VendaServicosProdutosApi.service;
 
 
+import com.VendaServicosProdutosApi.dto.requestDTO.UserCreateRequestDTO;
+import com.VendaServicosProdutosApi.dto.responseDTO.UserResponseDTO;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
+import com.VendaServicosProdutosApi.mapper.UserMapper;
 import com.VendaServicosProdutosApi.model.User;
 import com.VendaServicosProdutosApi.repository.UsersRepository;
 import jakarta.transaction.Transactional;
@@ -16,6 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UsersServices {
     private final UsersRepository usersRepository;
+    private final UserMapper userMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -24,18 +28,24 @@ public class UsersServices {
         return usersRepository.findAll();
     }
 
-    public User saveUser(User user) {
-        User encryptedUserPassword = new User();
+    public UserResponseDTO saveUser(UserCreateRequestDTO request) {
+        if(usersRepository.existsByEmailIgnoreCase(request.name()))
+            throw new RecursoNaoEncontradoException("Usuário já existe");
 
-        encryptedUserPassword.setName(user.getName());
-        encryptedUserPassword.setLogin(user.getLogin());
-        encryptedUserPassword.setPassword(passwordEncoder.encode(user.getPassword()));
-        encryptedUserPassword.setEmail(user.getEmail());
-        encryptedUserPassword.setUsertype(user.getUsertype());
-        encryptedUserPassword.setAvatar(user.getAvatar());
-        encryptedUserPassword.setActive(user.getActive());
+        User user = userMapper.toEntity(request);
 
-        return usersRepository.save(encryptedUserPassword);
+
+        user.setName(user.getName());
+        user.setLogin(user.getLogin());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEmail(user.getEmail());
+        user.setUsertype(user.getUsertype());
+        user.setAvatar(user.getAvatar());
+        user.setActive(user.getActive());
+
+        User savedUser = usersRepository.save(user);
+
+        return userMapper.toResponse(savedUser);
     }
 
     public User findUserById(Long idUser) {

@@ -1,27 +1,39 @@
 package com.VendaServicosProdutosApi.service;
 
 
+import com.VendaServicosProdutosApi.dto.ProductSummaryResponseDTO;
+import com.VendaServicosProdutosApi.dto.requestDTO.ProductCreateRequestDTO;
+import com.VendaServicosProdutosApi.dto.responseDTO.ProductResponseDTO;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
+import com.VendaServicosProdutosApi.mapper.ProductMapper;
 import com.VendaServicosProdutosApi.model.Product;
 import com.VendaServicosProdutosApi.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final AuditLogProductService auditLogProductService;
+    private final ProductMapper productMapper;
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public Page<ProductSummaryResponseDTO> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable)
+                .map(productMapper::toSummaryResponse);
     }
 
-    public Product productSave(Product product) {
-        return  productRepository.save(product);
+    public ProductResponseDTO productSave(ProductCreateRequestDTO request) {
+        if(productRepository.existsByNameIgnoreCase(request.name()))
+            throw new RecursoNaoEncontradoException("Esse produto já existe!");
+
+        Product product = productMapper.toEntity(request);
+
+        Product savedProduct = productRepository.save(product);
+
+        return  productMapper.toResponse(savedProduct);
     }
 
     public Product productFindById(Long idProduct) {

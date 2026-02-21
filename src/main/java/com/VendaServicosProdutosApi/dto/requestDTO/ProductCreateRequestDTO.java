@@ -22,5 +22,9 @@ public record ProductCreateRequestDTO(
     int stock_quantity,
 
     @NotNull
+    @Min(0)
+    Integer minimumStock,
+
+    @NotNull
     Boolean active
 ){}

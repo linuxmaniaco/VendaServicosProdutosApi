@@ -35,6 +35,10 @@ public class Product extends DomainBase{
 
     @NotNull
     @Column(nullable = false)
+    private Integer minimumStock;
+
+    @NotNull
+    @Column(nullable = false)
     private Boolean active;
 
     public Long getId() {
