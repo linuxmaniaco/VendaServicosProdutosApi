@@ -4,6 +4,7 @@ import com.VendaServicosProdutosApi.dto.requestDTO.UserCreateRequestDTO;
 import com.VendaServicosProdutosApi.dto.responseDTO.UserResponseDTO;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.User;
+import com.VendaServicosProdutosApi.model.UserType;
 import com.VendaServicosProdutosApi.service.UsersServices;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -66,6 +68,12 @@ public class UsersController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+
+    @GetMapping("/user-types")
+    public List<UserType> getUserTypes() {
+        return Arrays.asList(UserType.values());
     }
 
 }

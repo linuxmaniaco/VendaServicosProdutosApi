@@ -17,7 +17,7 @@ spring:
       hibernate:
         format_sql: true  # Formata as queries SQL para facilitar a leitura
 
-  expiration: 5
+  expiration: 60
   secret: "minha-chave-super-secreta-123456789123456789"
   emissor: "lanhouse"
 

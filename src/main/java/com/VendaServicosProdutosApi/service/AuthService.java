@@ -22,11 +22,20 @@ public class AuthService {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado!"));
 
         if(!passwordEncoder.matches(request.password(), user.getPassword())){
-            throw new RuntimeException("Senha Inválida!");
+            throw new RuntimeException("Usuário ou Senha Inválida!");
         }
 
         var token = tokenService.generateToken(user.getEmail());
 
-        return new AuthResponse(token, user.toString());
+        return new AuthResponse(
+                token,
+                user.getId(),
+                user.getName(),
+                user.getLogin(),
+                user.getEmail(),
+                user.getUsertype(),
+                user.getAvatar(),
+                user.getActive()
+        );
     }
 }

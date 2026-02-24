@@ -60,6 +60,6 @@ public class TokenService {
     }
 
     private Instant getDataExpiration(){
-        return LocalDateTime.now().plusMinutes(expiration).toInstant(ZoneOffset.of("-03:00"));
+        return Instant.now().plusSeconds(expiration * 60);
     }
 }

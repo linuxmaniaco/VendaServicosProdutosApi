@@ -1,6 +1,8 @@
 package com.VendaServicosProdutosApi.dto;
 
-public record AuthResponse(String token, String email) {}
+import com.VendaServicosProdutosApi.model.UserType;
+
+public record AuthResponse(String token, long id, String name, String login, String email, UserType usertype, String avatar, boolean active ) {}
 //public class AuthResponse {
 //    private String token;
 //    private String email;

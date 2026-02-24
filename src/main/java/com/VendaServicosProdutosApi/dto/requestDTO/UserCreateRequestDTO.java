@@ -21,7 +21,6 @@ public record UserCreateRequestDTO(
         @NotNull
         UserType usertype,
 
-        @NotNull
         String avatar,
 
         @NotNull
