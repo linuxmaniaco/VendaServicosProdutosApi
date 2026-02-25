@@ -8,6 +8,7 @@ import com.VendaServicosProdutosApi.mapper.UserMapper;
 import com.VendaServicosProdutosApi.model.User;
 import com.VendaServicosProdutosApi.repository.TokenRepository;
 import com.VendaServicosProdutosApi.repository.UsersRepository;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,9 @@ public class UsersServices {
 
         userFromDb.setName(userRequest.getName());
         userFromDb.setLogin(userRequest.getLogin());
-        userFromDb.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        if(userRequest.getPassword() != null && !userRequest.getPassword().isEmpty()) {
+            userFromDb.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        }
         userFromDb.setEmail(userRequest.getEmail());
         userFromDb.setUsertype(userRequest.getUsertype());
         userFromDb.setAvatar(userRequest.getAvatar());
