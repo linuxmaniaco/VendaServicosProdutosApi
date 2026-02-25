@@ -6,6 +6,7 @@ import com.VendaServicosProdutosApi.dto.responseDTO.UserResponseDTO;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.mapper.UserMapper;
 import com.VendaServicosProdutosApi.model.User;
+import com.VendaServicosProdutosApi.repository.TokenRepository;
 import com.VendaServicosProdutosApi.repository.UsersRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,15 @@ public class UsersServices {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private TokenRepository tokenRepository;
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(){
         return usersRepository.findAll();
+    }
+
+    public List<User> getAllUsersTrue() {
+        return usersRepository.findByActiveTrue();
     }
 
     public UserResponseDTO saveUser(UserCreateRequestDTO request) {
@@ -60,7 +67,7 @@ public class UsersServices {
 
         userFromDb.setName(userRequest.getName());
         userFromDb.setLogin(userRequest.getLogin());
-        userFromDb.setPassword(userRequest.getPassword());
+        userFromDb.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         userFromDb.setEmail(userRequest.getEmail());
         userFromDb.setUsertype(userRequest.getUsertype());
         userFromDb.setAvatar(userRequest.getAvatar());
@@ -79,10 +86,15 @@ public class UsersServices {
         }
     }
 
-
-    public void deleteUserById(Long idUser) {
-        usersRepository.findById(idUser).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado: " + idUser));
-        usersRepository.deleteById(idUser);
+    @Transactional
+    public void deleteUserById(Long userId) {
+       User user = usersRepository.findById(userId).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado: " + userId));
+//        usersRepository.deleteById(idUser);
+        user.setActive(false);
     }
+
+//    public void activateUser(Long userId){
+//        User userToActivate = usersRepository.findByActiveFalse(userId)
+//    }
 
 }

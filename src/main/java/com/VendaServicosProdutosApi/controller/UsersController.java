@@ -25,10 +25,15 @@ public class UsersController {
 
     private final UsersServices usersServices;
 
-
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers(){
         List<User> user = usersServices.getAllUsers();
+        return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/true")
+    public ResponseEntity<List<User>> getAllUsersTrue() {
+        List<User> user = usersServices.getAllUsersTrue();
         return ResponseEntity.ok(user);
     }
 
