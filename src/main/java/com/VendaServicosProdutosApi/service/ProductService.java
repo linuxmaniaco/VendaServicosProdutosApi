@@ -21,7 +21,7 @@ public class ProductService {
     private final ProductMapper productMapper;
 
     public Page<ProductSummaryResponseDTO> findAll(Pageable pageable) {
-        return productRepository.findAll(pageable)
+        return productRepository.findByActiveTrue(pageable)
                 .map(productMapper::toSummaryResponse);
     }
 
@@ -57,8 +57,10 @@ public class ProductService {
 //        return productRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Produto não Encontrado: " + id));
     }
 
+    @Transactional
     public void productDelete(Long idProduct) {
-        productRepository.findById(idProduct).orElseThrow(()-> new RecursoNaoEncontradoException("Produto não encontrado: " + idProduct));
-        productRepository.deleteById(idProduct);
+        Product product = productRepository.findById(idProduct).orElseThrow(()-> new RecursoNaoEncontradoException("Produto não encontrado: " + idProduct));
+//        productRepository.deleteById(idProduct);
+        product.setActive(false);
     }
 }

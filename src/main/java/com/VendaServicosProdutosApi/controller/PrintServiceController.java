@@ -23,9 +23,15 @@ import java.util.List;
 public class PrintServiceController {
     private final PrintServiceService printServiceService;
 
+//    @GetMapping
+//    public ResponseEntity<List<PrintService>> findAll() {
+//        List<PrintService> printServices = printServiceService.findAll();
+//        return ResponseEntity.ok(printServices);
+//    }
+
     @GetMapping
-    public ResponseEntity<List<PrintService>> findAll() {
-        List<PrintService> printServices = printServiceService.findAll();
+    public ResponseEntity<List<PrintService>> getAllPrintServiceTrue() {
+        List<PrintService> printServices = printServiceService.getAllPrintServiceTrue();
         return ResponseEntity.ok(printServices);
     }
 

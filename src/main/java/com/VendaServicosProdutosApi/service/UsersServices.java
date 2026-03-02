@@ -92,7 +92,6 @@ public class UsersServices {
     @Transactional
     public void deleteUserById(Long userId) {
        User user = usersRepository.findById(userId).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado: " + userId));
-//        usersRepository.deleteById(idUser);
         user.setActive(false);
     }
 

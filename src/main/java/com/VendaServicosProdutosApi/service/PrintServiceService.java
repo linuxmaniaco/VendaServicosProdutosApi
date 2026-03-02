@@ -19,9 +19,11 @@ public class PrintServiceService {
     private final PrintServiceRepository printServiceRepository;
     private final PrintServiceMapper printServiceMapper;
 
-    public List<PrintService> findAll() {
-        return printServiceRepository.findAll();
-    }
+//    public List<PrintService> findAll() {
+//        return printServiceRepository.findAll();
+//    }
+
+    public List<PrintService> getAllPrintServiceTrue(){return printServiceRepository.findByActiveTrue();}
 
     public PrintServiceResponseDTO printServiceSave(PrintServiceCreateRequestDTO request) {
         if(printServiceRepository.existsPrintServiceByName(request.name()))
@@ -52,9 +54,11 @@ public class PrintServiceService {
         return printServiceFromDb;
     }
 
+    @Transactional
     public void deletePrintService(Long id) {
-        printServiceRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Serviço não encontrado: " + id));
-        printServiceRepository.deleteById(id);
+        PrintService printService = printServiceRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Serviço não encontrado: " + id));
+        printService.setActive(false);
+//        printServiceRepository.deleteById(id);
     }
 
 }
