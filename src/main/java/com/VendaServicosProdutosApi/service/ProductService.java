@@ -10,6 +10,7 @@ import com.VendaServicosProdutosApi.model.Product;
 import com.VendaServicosProdutosApi.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.converters.PropertyCustomizingConverter;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +21,15 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
-    public Page<ProductSummaryResponseDTO> findAll(Pageable pageable) {
-        return productRepository.findByActiveTrue(pageable)
-                .map(productMapper::toSummaryResponse);
+    public Page<ProductSummaryResponseDTO> findAll(Pageable pageable, String search) {
+        Page<Product> page;
+
+        if(search != null && !search.isBlank()){
+            page = productRepository.findByNameContainingIgnoreCaseAndActiveTrue(search, pageable);
+        } else {
+            page = productRepository.findByActiveTrue(pageable);
+        }
+        return page.map(productMapper::toSummaryResponse);
     }
 
     public ProductResponseDTO productSave(ProductCreateRequestDTO request) {
