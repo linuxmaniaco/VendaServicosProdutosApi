@@ -57,6 +57,7 @@ public class ProductService {
         productFromDb.setDescription(product.getDescription());
         productFromDb.setUnit_Price(product.getUnit_Price());
         productFromDb.setStock_quantity(product.getStock_quantity());
+        productFromDb.setMinimumStock(product.getMinimumStock());
         productFromDb.setActive(product.getActive());
 
         return productFromDb;
