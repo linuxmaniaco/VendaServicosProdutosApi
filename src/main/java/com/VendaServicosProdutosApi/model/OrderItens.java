@@ -61,7 +61,7 @@ public class OrderItens {
     @PreUpdate
     public void calculateTotalValue() {
         if (quantity != null && unitValueAtTimeOfSale != null) {
-            this.totalItemValue = unitValueAtTimeOfSale.multiply(BigDecimal.valueOf(quantity));
+             this.totalItemValue = unitValueAtTimeOfSale.multiply(BigDecimal.valueOf(quantity));
         }
     }
 }

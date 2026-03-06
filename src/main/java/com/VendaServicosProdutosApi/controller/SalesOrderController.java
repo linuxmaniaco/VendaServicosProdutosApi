@@ -1,5 +1,6 @@
 package com.VendaServicosProdutosApi.controller;
 
+import com.VendaServicosProdutosApi.dto.SalesReportDTO;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.SalesOrder;
 import com.VendaServicosProdutosApi.service.SalesOrderService;
@@ -60,5 +61,10 @@ public class SalesOrderController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+    }
+
+    @GetMapping("/reportSaler")
+    public List<SalesReportDTO> getSalesReport() {
+        return salesOrderService.getSalesReport();
     }
 }

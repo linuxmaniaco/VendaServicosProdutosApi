@@ -1,5 +1,9 @@
 package com.VendaServicosProdutosApi.service;
 
+import com.VendaServicosProdutosApi.dto.OrderItensDTO;
+import com.VendaServicosProdutosApi.dto.PrintServiceDTO;
+import com.VendaServicosProdutosApi.dto.ProductItemDTO;
+import com.VendaServicosProdutosApi.dto.SalesReportDTO;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.*;
 import com.VendaServicosProdutosApi.repository.PrintServiceRepository;
@@ -8,10 +12,14 @@ import com.VendaServicosProdutosApi.repository.SalesOrderRepository;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.Order;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -90,6 +98,41 @@ public class SalesOrderService {
     public void salesOrderDelete(Long idSalesOrder) {
         salesOrderRepository.findById(idSalesOrder).orElseThrow(() -> new RecursoNaoEncontradoException("Pedido não encontrado " + idSalesOrder));
         salesOrderRepository.deleteById(idSalesOrder);
+    }
+
+    public List<SalesReportDTO> getSalesReport() {
+
+        List<Object[]> rows = salesOrderRepository.findSalesReport();
+
+        Map<Long, SalesReportDTO> map = new LinkedHashMap<>();
+
+        for (Object[] row : rows) {
+
+            Long orderId = (Long) row[0];
+
+            SalesReportDTO report = map.computeIfAbsent(orderId, id -> {
+
+                SalesReportDTO dto = new SalesReportDTO();
+                dto.setOrderId(id);
+                dto.setCustomer((String) row[1]);
+                dto.setDateHour((java.time.LocalDateTime) row[2]);
+                dto.setTotalValueOrder((java.math.BigDecimal) row[3]);
+                dto.setOrderItens(new ArrayList<>());
+
+                return dto;
+            });
+
+            OrderItensDTO orderItens = new OrderItensDTO();
+            orderItens.setName((String) row[4]);
+            orderItens.setId((Long) row[5]);
+            orderItens.setQuantity((Integer) row[6]);
+            orderItens.setPrice((BigDecimal) row[7]);
+
+            report.getOrderItens().add(orderItens);
+
+        }
+
+        return new ArrayList<>(map.values());
     }
 
 }
