@@ -1,5 +1,27 @@
-#services:
-#  mysql-db:
-#    image: mysql:8.0
-#    ports:
-#      - "3306:3306"
+version: "3.9"
+
+services:
+
+  mysql-db:
+    image: mysql:8
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: senha123
+      MYSQL_DATABASE: services_lan
+    ports:
+      - "3307:3307"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: venda-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-db

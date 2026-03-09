@@ -17,7 +17,7 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        if (usersRepository.count() == 9) {
+        if (usersRepository.count() == 0) {
 
             User admin = new User();
             admin.setName("Administrador");
