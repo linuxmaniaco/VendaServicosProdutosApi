@@ -52,8 +52,10 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "http://192.168.1.90:8081",
-                "http://localhost:8080"
+                "https://www.arenagames.net.br",
+                "https://arenagames.net.br"
+//                "http://192.168.1.90:8081",
+//                "http://localhost:8080"
         ));
 
         configuration.setAllowedMethods(List.of(
