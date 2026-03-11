@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +61,6 @@ public class TokenService {
     }
 
     private Instant getDataExpiration(){
-        return Instant.now().plusSeconds(expiration * 60);
+        return Instant.now().plus(12, ChronoUnit.HOURS);
     }
 }
