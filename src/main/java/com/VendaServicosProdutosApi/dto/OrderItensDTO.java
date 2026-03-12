@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-//CLASSE DTO PROVAVELMENTE NÃO USANDO
+//CLASSE DTO PROVAVELMENTE NÃO USANDO.
 @Getter
 @Setter
 public class OrderItensDTO {
