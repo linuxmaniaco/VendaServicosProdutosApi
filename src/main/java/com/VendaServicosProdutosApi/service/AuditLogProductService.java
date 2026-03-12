@@ -47,7 +47,7 @@ public class AuditLogProductService {
         }
     }
 
-    // Metodo auxiliar para pegar o id do produto via reflexão
+    // Metodo auxiliar para pegar o id do produto via reflexão.
     private Long extractId(Object obj) {
         try {
             var field = obj.getClass().getDeclaredField("id");
