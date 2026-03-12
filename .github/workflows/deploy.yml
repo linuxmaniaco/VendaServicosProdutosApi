@@ -22,7 +22,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build image
-        run: docker build -t linuxmaniaco/venda-servicos-produtos:latest .
+        run: docker build -f docker/Dockerfile -t linuxmaniaco/venda-servicos-produtos:latest .
 
       - name: Push image
         run: docker push linuxmaniaco/venda-servicos-produtos:latest
