@@ -60,7 +60,6 @@ public class PrintServiceService {
     public void deletePrintService(Long id) {
         PrintService printService = printServiceRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Serviço não encontrado: " + id));
         printService.setActive(false);
-//        printServiceRepository.deleteById(id);
     }
 
 }
