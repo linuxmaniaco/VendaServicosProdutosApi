@@ -23,6 +23,7 @@ public interface SalesOrderRepository extends JpaRepository<SalesOrder, Long> {
         JOIN oi.salesOrder so
         LEFT JOIN oi.product p
         LEFT JOIN oi.printService s
+        WHERE DATE(so.dataHour) = CURRENT_DATE
         ORDER BY so.dataHour DESC
     """)
     List<Object[]> findSalesReport();

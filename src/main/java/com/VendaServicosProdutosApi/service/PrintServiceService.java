@@ -23,7 +23,9 @@ public class PrintServiceService {
 //        return printServiceRepository.findAll();
 //    }
 
-    public List<PrintService> getAllPrintServiceTrue(){return printServiceRepository.findByActiveTrue();}
+    public List<PrintService> getAllPrintServiceTrue(){
+        return printServiceRepository.findByActiveTrueOrderByNameAsc();
+    }
 
     public PrintServiceResponseDTO printServiceSave(PrintServiceCreateRequestDTO request) {
         if(printServiceRepository.existsPrintServiceByName(request.name()))

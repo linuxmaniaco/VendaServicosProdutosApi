@@ -54,7 +54,7 @@ public class SecurityConfiguration {
         configuration.setAllowedOrigins(List.of(
                 "https://www.arenagames.net.br",
                 "https://arenagames.net.br"
-//                "http://192.168.1.90:8081",
+//                "http://192.168.1.90:8081"
 //                "http://localhost:8080"
         ));
 

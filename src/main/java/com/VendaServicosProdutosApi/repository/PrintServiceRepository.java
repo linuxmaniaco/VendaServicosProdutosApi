@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface PrintServiceRepository extends JpaRepository<PrintService, Long> {
     boolean existsPrintServiceByName(String name);
-    List<PrintService> findByActiveTrue();
+    List<PrintService> findByActiveTrueOrderByNameAsc();
 }
