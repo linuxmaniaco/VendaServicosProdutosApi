@@ -63,6 +63,11 @@ public class SalesOrderController {
         }
     }
 
+//    @GetMapping("/reportSaler")
+//    public List<SalesReportDTO> getSalesReport() {
+//        return salesOrderService.getSalesReport();
+//    }
+
     @GetMapping("/reportSaler")
     public List<SalesReportDTO> getSalesReport() {
         return salesOrderService.getSalesReport();

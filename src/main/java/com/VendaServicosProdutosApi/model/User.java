@@ -15,7 +15,7 @@ public class User extends DomainBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull
     @Column(nullable = false)

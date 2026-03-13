@@ -13,6 +13,9 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.query.Order;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,6 +32,7 @@ public class SalesOrderService {
     private final ProductRepository  productRepository;
     private final PrintServiceRepository  printServiceRepository;
     private final OrderItensService orderItensService;
+    private final AuthService authService;
 
 
     public List<SalesOrder> getAllSalesOrders() {
@@ -102,7 +106,12 @@ public class SalesOrderService {
 
     public List<SalesReportDTO> getSalesReport() {
 
-        List<Object[]> rows = salesOrderRepository.findSalesReport();
+        User user = (User) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        List<Object[]> rows = salesOrderRepository.findSalesReport(user.getId());
 
         Map<Long, SalesReportDTO> map = new LinkedHashMap<>();
 
@@ -127,6 +136,7 @@ public class SalesOrderService {
             orderItens.setId((Long) row[5]);
             orderItens.setQuantity((Integer) row[6]);
             orderItens.setPrice((BigDecimal) row[7]);
+            orderItens.setItemType((ItemType) row[8]);
 
             report.getOrderItens().add(orderItens);
 

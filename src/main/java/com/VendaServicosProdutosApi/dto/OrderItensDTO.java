@@ -1,5 +1,6 @@
 package com.VendaServicosProdutosApi.dto;
 
+import com.VendaServicosProdutosApi.model.ItemType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,4 +14,5 @@ public class OrderItensDTO {
     private String name;
     private Integer quantity;
     private BigDecimal price;
+    private ItemType itemType;
 }
