@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.converter.json.GsonBuilderUtils;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -28,5 +30,14 @@ public interface SalesOrderRepository extends JpaRepository<SalesOrder, Long> {
         ORDER BY so.dataHour DESC
     """)
     List<Object[]> findSalesReport(Long userId);
+
+    @Query("""
+    SELECT COALESCE(SUM(so.totalValue), 0)
+    FROM SalesOrder so
+    WHERE so.user.id = :userId
+    AND so.dataHour >= :start
+    AND so.dataHour < :end
+""")
+    BigDecimal findRevenueBetweenDates(Long userId, LocalDateTime start, LocalDateTime end);
 }
 

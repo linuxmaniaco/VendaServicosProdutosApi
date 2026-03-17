@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -143,6 +145,22 @@ public class SalesOrderService {
         }
 
         return new ArrayList<>(map.values());
+    }
+
+    public BigDecimal getYesterdayRevenue() {
+
+        User user = (User) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+
+        LocalDateTime start = yesterday.atStartOfDay();
+        LocalDateTime end = yesterday.plusDays(1).atStartOfDay();
+
+        return salesOrderRepository
+                .findRevenueBetweenDates(user.getId(), start, end);
     }
 
 }
