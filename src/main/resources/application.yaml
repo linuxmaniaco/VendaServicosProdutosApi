@@ -2,16 +2,17 @@ spring:
   application:
     name: VendaServicosProdutos
 
-#  datasource:
-#    url: jdbc:mysql://localhost:3306/services_lan
-#    username: root
-#    password: senha123
-#    driver-class-name: com.mysql.cj.jdbc.Driver
   datasource:
-    url: jdbc:mysql://mysql-arena:3306/services_lan
+    url: jdbc:mysql://localhost:3306/services_lan
     username: root
-    password: Aolttarj01**
+    password: senha123
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+#  datasource:
+#    url: jdbc:mysql://mysql-arena:3306/services_lan
+#    username: root
+#    password: Aolttarj01**
+#    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     defer-datasource-initialization: true

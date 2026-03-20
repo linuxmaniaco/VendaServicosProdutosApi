@@ -1,9 +1,11 @@
 package com.VendaServicosProdutosApi.service;
 
+import com.VendaServicosProdutosApi.dto.DailyReportDTO;
 import com.VendaServicosProdutosApi.dto.OrderItensDTO;
 import com.VendaServicosProdutosApi.dto.PrintServiceDTO;
 import com.VendaServicosProdutosApi.dto.ProductItemDTO;
 import com.VendaServicosProdutosApi.dto.SalesReportDTO;
+import com.VendaServicosProdutosApi.exception.AuthenticationException;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.*;
 import com.VendaServicosProdutosApi.repository.PrintServiceRepository;
@@ -161,6 +163,62 @@ public class SalesOrderService {
 
         return salesOrderRepository
                 .findRevenueBetweenDates(user.getId(), start, end);
+    }
+
+    public DailyReportDTO getReportByDate(LocalDate date) {
+
+        User user = (User) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        if (user.getUsertype() != UserType.ADMIN) {
+            throw new AuthenticationException("Acesso negado: apenas administradores podem acessar este relatório.");
+        }
+
+        LocalDateTime start = date.atStartOfDay();
+        LocalDateTime end = date.plusDays(1).atStartOfDay();
+
+        List<Object[]> rows = salesOrderRepository.findSalesReportByDate(start, end);
+
+        Map<Long, SalesReportDTO> map = new LinkedHashMap<>();
+
+        for (Object[] row : rows) {
+
+            Long orderId = (Long) row[0];
+
+            SalesReportDTO report = map.computeIfAbsent(orderId, id -> {
+                SalesReportDTO dto = new SalesReportDTO();
+                dto.setOrderId(id);
+                dto.setCustomer((String) row[1]);
+                dto.setDateHour((LocalDateTime) row[2]);
+                dto.setTotalValueOrder((BigDecimal) row[3]);
+                dto.setOrderItens(new ArrayList<>());
+                return dto;
+            });
+
+            OrderItensDTO orderItens = new OrderItensDTO();
+            orderItens.setName((String) row[4]);
+            orderItens.setId((Long) row[5]);
+            orderItens.setQuantity((Integer) row[6]);
+            orderItens.setPrice((BigDecimal) row[7]);
+            orderItens.setItemType((ItemType) row[8]);
+
+            report.getOrderItens().add(orderItens);
+        }
+
+        List<SalesReportDTO> orders = new ArrayList<>(map.values());
+
+        BigDecimal totalRevenue = orders.stream()
+                .map(SalesReportDTO::getTotalValueOrder)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        DailyReportDTO dailyReport = new DailyReportDTO();
+        dailyReport.setDate(date);
+        dailyReport.setTotalRevenue(totalRevenue);
+        dailyReport.setOrders(orders);
+
+        return dailyReport;
     }
 
 }

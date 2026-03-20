@@ -39,5 +39,26 @@ public interface SalesOrderRepository extends JpaRepository<SalesOrder, Long> {
     AND so.dataHour < :end
 """)
     BigDecimal findRevenueBetweenDates(Long userId, LocalDateTime start, LocalDateTime end);
+
+    @Query("""
+        SELECT
+            so.id,
+            so.customer,
+            so.dataHour,
+            so.totalValue,
+            COALESCE(p.name, s.name) AS itemName,
+            oi.id,
+            oi.quantity,
+            oi.unitValueAtTimeOfSale,
+            oi.itemType
+        FROM OrderItens oi
+        JOIN oi.salesOrder so
+        LEFT JOIN oi.product p
+        LEFT JOIN oi.printService s
+        WHERE so.dataHour >= :start
+          AND so.dataHour < :end
+        ORDER BY so.dataHour DESC
+    """)
+    List<Object[]> findSalesReportByDate(LocalDateTime start, LocalDateTime end);
 }
 
