@@ -1,6 +1,8 @@
 package com.VendaServicosProdutosApi.controller;
 
+import com.VendaServicosProdutosApi.dto.DailyReportDTO;
 import com.VendaServicosProdutosApi.dto.SalesReportDTO;
+import com.VendaServicosProdutosApi.exception.AuthenticationException;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.SalesOrder;
 import com.VendaServicosProdutosApi.service.SalesOrderService;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -72,5 +75,14 @@ public class SalesOrderController {
     @GetMapping("/yesterdayRevenue")
     public BigDecimal getYesterdayRevenue() {
         return salesOrderService.getYesterdayRevenue();
+    }
+
+    @GetMapping("/reportByDate")
+    public ResponseEntity<DailyReportDTO> getReportByDate(@RequestParam("date") LocalDate date) {
+        try {
+            return ResponseEntity.ok(salesOrderService.getReportByDate(date));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 }
