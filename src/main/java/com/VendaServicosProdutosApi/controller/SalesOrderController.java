@@ -3,6 +3,7 @@ package com.VendaServicosProdutosApi.controller;
 import com.VendaServicosProdutosApi.dto.DailyReportDTO;
 import com.VendaServicosProdutosApi.dto.SalesReportDTO;
 import com.VendaServicosProdutosApi.exception.AuthenticationException;
+import com.VendaServicosProdutosApi.exception.EstoqueInsuficienteException;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.SalesOrder;
 import com.VendaServicosProdutosApi.service.SalesOrderService;
@@ -31,18 +32,24 @@ public class SalesOrderController {
     }
 
     @PostMapping
-    public ResponseEntity<SalesOrder> salesOrderSave(@RequestBody SalesOrder salesOrder) {
-        SalesOrder savedSalesOrder = salesOrderService.salesOrderSave(salesOrder);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedSalesOrder);
+    public ResponseEntity<?> salesOrderSave(@RequestBody SalesOrder salesOrder) {
+        try {
+            SalesOrder savedSalesOrder = salesOrderService.salesOrderSave(salesOrder);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedSalesOrder);
+        } catch (EstoqueInsuficienteException e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SalesOrder> salesOrderUpdate(@PathVariable Long id, @RequestBody SalesOrder salesOrder) {
+    public ResponseEntity<?> salesOrderUpdate(@PathVariable Long id, @RequestBody SalesOrder salesOrder) {
         try {
             SalesOrder savedSalesOrder = salesOrderService.salesOrderUpdate(id, salesOrder);
             return ResponseEntity.ok(savedSalesOrder);
+        } catch (EstoqueInsuficienteException e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
         } catch (RecursoNaoEncontradoException e) {
-            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 

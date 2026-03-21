@@ -6,18 +6,15 @@ import com.VendaServicosProdutosApi.dto.PrintServiceDTO;
 import com.VendaServicosProdutosApi.dto.ProductItemDTO;
 import com.VendaServicosProdutosApi.dto.SalesReportDTO;
 import com.VendaServicosProdutosApi.exception.AuthenticationException;
+import com.VendaServicosProdutosApi.exception.EstoqueInsuficienteException;
 import com.VendaServicosProdutosApi.exception.RecursoNaoEncontradoException;
 import com.VendaServicosProdutosApi.model.*;
 import com.VendaServicosProdutosApi.repository.PrintServiceRepository;
 import com.VendaServicosProdutosApi.repository.ProductRepository;
 import com.VendaServicosProdutosApi.repository.SalesOrderRepository;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.Order;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -33,18 +30,19 @@ import java.util.Map;
 public class SalesOrderService {
 
     private final SalesOrderRepository salesOrderRepository;
-    private final ProductRepository  productRepository;
-    private final PrintServiceRepository  printServiceRepository;
+    private final ProductRepository productRepository;
+    private final PrintServiceRepository printServiceRepository;
     private final OrderItensService orderItensService;
     private final AuthService authService;
+    private final EstoqueNotificacaoService estoqueNotificacaoService;
 
 
     public List<SalesOrder> getAllSalesOrders() {
         return salesOrderRepository.findAll();
     }
 
+    @Transactional
     public SalesOrder salesOrderSave(SalesOrder salesOrder) {
-
         updateList(salesOrder);
         salesOrder.setStatus(OrderStatus.PAGO);
         return salesOrderRepository.save(salesOrder);
@@ -58,7 +56,20 @@ public class SalesOrderService {
             // Verifica se é Produto
             if ("PRODUTO".equalsIgnoreCase(item.getItemType().toString()) && item.getProduct().getId() != null) {
                 Product product = productRepository.findById(item.getProduct().getId())
-                        .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                        .orElseThrow(() -> new RecursoNaoEncontradoException("Produto não encontrado"));
+
+                if (item.getQuantity() > product.getStock_quantity()) {
+                    throw new EstoqueInsuficienteException(
+                            "Estoque insuficiente para o produto '" + product.getName() +
+                            "'. Disponível: " + product.getStock_quantity() +
+                            ", solicitado: " + item.getQuantity()
+                    );
+                }
+
+                product.setStock_quantity(product.getStock_quantity() - item.getQuantity());
+                productRepository.save(product);
+                estoqueNotificacaoService.verificarEstoqueMinimo(product);
+
                 item.setUnitValueAtTimeOfSale(BigDecimal.valueOf(product.getUnit_Price()));
             }
 
@@ -81,6 +92,7 @@ public class SalesOrderService {
         salesOrder.setTotalValue(totalValue);
     }
 
+    @Transactional
     public SalesOrder salesOrderUpdate(Long id, SalesOrder salesOrder) {
 
         SalesOrder salesOrderDB = salesOrderRepository.findById(id)
